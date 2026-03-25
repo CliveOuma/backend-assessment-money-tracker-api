@@ -12,8 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('wallets', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->uuid('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('name');
             $table->timestamps();
+            
+            // Add indexes for performance
+            $table->index('user_id');
+            $table->index(['user_id', 'name']);
         });
     }
 

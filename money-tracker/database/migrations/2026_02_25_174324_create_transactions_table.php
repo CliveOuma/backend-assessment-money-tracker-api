@@ -12,8 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('transactions', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->uuid('wallet_id');
+            $table->foreign('wallet_id')->references('id')->on('wallets')->onDelete('cascade');
+            $table->enum('type', ['income', 'expense']);
+            $table->decimal('amount', 10, 2);
+            $table->text('description')->nullable();
             $table->timestamps();
+            
+            // Add indexes for performance
+            $table->index(['wallet_id', 'type']);
+            $table->index(['wallet_id', 'created_at']);
+            $table->index('type');
+            $table->index('created_at');
         });
     }
 
