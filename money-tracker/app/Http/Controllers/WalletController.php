@@ -4,33 +4,52 @@ namespace App\Http\Controllers;
 
 use App\Models\Wallet;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\ValidationException;
+use Exception;
 
 class WalletController extends Controller
 {
     
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'user_id' => 'required|integer|exists:users,id',
-            'name'    => 'required|string|max:255',
-        ]);
+        try {
+            $validated = $request->validate([
+                'user_id' => 'required|string|uuid|exists:users,id',
+                'name'    => 'required|string|max:255',
+            ]);
 
-        $wallet = Wallet::create($validated);
+            $wallet = Wallet::create($validated);
 
-        return response()->json($wallet, 201);
+            return $this->apiResponse($wallet, 'Wallet created successfully', 201);
+            
+        } catch (ValidationException $e) {
+            return $this->apiResponse(null, 'Validation failed: ' . $e->getMessage(), 422);
+        } catch (Exception $e) {
+            return $this->handleApiException($request, $e);
+        }
     }
 
     public function show($id)
     {
-        $wallet = Wallet::findOrFail($id);
+        try {
+            $wallet = Wallet::findOrFail($id);
 
-        $transactions = $wallet->transactions;
+            $transactions = $wallet->transactions;
 
-        return response()->json([
-            'id'           => $wallet->id,
-            'name'         => $wallet->name,
-            'balance'      => $wallet->balance,  
-            'transactions' => $transactions,
-        ]);
+            $walletData = [
+                'id'           => $wallet->id,
+                'name'         => $wallet->name,
+                'balance'      => $wallet->balance,  
+                'transactions' => $transactions,
+            ];
+
+            return $this->apiResponse($walletData, 'Wallet retrieved successfully');
+            
+        } catch (ModelNotFoundException $e) {
+            return $this->apiResponse(null, 'Wallet not found', 404);
+        } catch (Exception $e) {
+            return $this->handleApiException($request, $e);
+        }
     }
 }

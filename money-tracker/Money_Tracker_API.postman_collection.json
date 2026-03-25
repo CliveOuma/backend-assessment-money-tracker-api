@@ -1,0 +1,181 @@
+{
+	"info": {
+		"_postman_id": "money-tracker-api",
+		"name": "Money Tracker API",
+		"description": "Postman collection for testing the Money Tracker RESTful API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john.doe@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/users",
+							"host": ["{{BASE_URL}}"],
+							"path": ["api", "users"]
+						},
+						"description": "Create a new user with name and email"
+					},
+					"response": []
+				},
+				{
+					"name": "Get User with Wallets",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/api/users/1",
+							"host": ["{{BASE_URL}}"],
+							"path": ["api", "users", "1"]
+						},
+						"description": "Get user details including all wallets and total balance"
+					},
+					"response": []
+				}
+			],
+			"description": "User management endpoints"
+		},
+		{
+			"name": "Wallets",
+			"item": [
+				{
+					"name": "Create Wallet",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": 1,\n    \"name\": \"Main Wallet\"\n}"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/wallets",
+							"host": ["{{BASE_URL}}"],
+							"path": ["api", "wallets"]
+						},
+						"description": "Create a new wallet for a user"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Wallet with Transactions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/api/wallets/1",
+							"host": ["{{BASE_URL}}"],
+							"path": ["api", "wallets", "1"]
+						},
+						"description": "Get wallet details including balance and all transactions"
+					},
+					"response": []
+				}
+			],
+			"description": "Wallet management endpoints"
+		},
+		{
+			"name": "Transactions",
+			"item": [
+				{
+					"name": "Add Income Transaction",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"wallet_id\": 1,\n    \"type\": \"income\",\n    \"amount\": 1000.00,\n    \"description\": \"Salary payment\"\n}"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/transactions",
+							"host": ["{{BASE_URL}}"],
+							"path": ["api", "transactions"]
+						},
+						"description": "Add an income transaction to a wallet"
+					},
+					"response": []
+				},
+				{
+					"name": "Add Expense Transaction",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"wallet_id\": 1,\n    \"type\": \"expense\",\n    \"amount\": 250.50,\n    \"description\": \"Grocery shopping\"\n}"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/transactions",
+							"host": ["{{BASE_URL}}"],
+							"path": ["api", "transactions"]
+						},
+						"description": "Add an expense transaction to a wallet"
+					},
+					"response": []
+				}
+			],
+			"description": "Transaction management endpoints"
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": "http://localhost:8000",
+			"type": "string"
+		}
+	]
+}

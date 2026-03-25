@@ -3,10 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class Wallet extends Model
 {
+    use HasUuids;
+    
     protected $fillable = ['user_id', 'name'];
+    protected $appends = ['balance'];
+    protected $keyType = 'string';
+    public $incrementing = false; 
 
     /**
      * Each wallet belongs to one user.
@@ -35,6 +41,7 @@ class Wallet extends Model
     {
         $income  = $this->transactions()->where('type', 'income')->sum('amount');
         $expense = $this->transactions()->where('type', 'expense')->sum('amount');
+        
         return $income - $expense;
     }
 }
