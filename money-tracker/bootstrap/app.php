@@ -10,6 +10,10 @@ return Application::configure(basePath: dirname(__DIR__))
         api: __DIR__.'/../routes/api.php', 
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
+        then: function () {
+            // Global UUID pattern for all routes
+            Route::pattern('uuid', '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}');
+        },
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->api(prepend: [
